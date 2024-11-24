@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Identity
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    int roleCounter = 1;
+}
+
+
+<div class="col">
+    <div class="row">
+        <h3>All Roles</h3>
+        <div class="row">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+                </div>
+
+                <form asp-action="Create" method="post">
+                    <div class="modal fade" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createModalLabel">Create Role</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Place your form elements inside the <form> tag -->
+                                    @* <form asp-action="Create" method="post"> *@
+                                    <div class="form-group">
+                                        <label for="name">Role Name:</label>
+                                        <input name="name" class="form-control" required />
+                                    </div>
+                                    @* </form> *@
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-warning">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Role Id</th>
+                    <th>Role Name</th>
+                    <th>Actions</th>
+                    <!-- Add other role properties as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>@roleCounter</td>
+                        <td>@role.Name</td>
+                        <td>
+                            <div class="row">
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-@roleCounter">Edit</button>
+                                    <!-- Edit Modal -->
+                                    <form asp-action="Edit" asp-route-id="@role.Id" name="Id" method="post">
+                                        <div class="modal fade" id="editModal-@roleCounter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel-@roleCounter" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalLabel-@roleCounter">Edit Role</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input name="name" class="form-control" value="@role.Name" required />
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btm-sm btn-warning">Edit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col">
+                                    <form asp-action="Delete" asp-route-Id="@role.Id" name="Id" method="post">
+                                        <button type="submit" class="btn btm-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                        <!-- Add other role properties as needed -->
+                    </tr>
+                    roleCounter++;
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

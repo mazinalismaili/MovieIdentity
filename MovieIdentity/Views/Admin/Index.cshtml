@@ -1,0 +1,81 @@
+﻿@model MovieIdentity.Models.ViewModel.AdminViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<h3>Users' Roles</h3>
+<div class="row">
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleToUserModal">Add</button>
+        </div>
+
+        <form asp-action="AssignRoleToUser" method="post">
+            <div class="modal fade" id="addRoleToUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addRoleToUserModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addRoleToUserModalLabel">Assign Role</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Place your form elements inside the <form> tag -->
+                            <div class="form-group">
+                                <label asp-for="Roles" class="control-label">Role Name</label>
+                                <select name="rolename" class="form-control" asp-items="new SelectList(Model.Roles, nameof(Role.Name), nameof(Role.Name))" required></select>
+                                <label asp-for="Users" class="control-label">Employee Name</label>
+                                <select name="userid" class="form-control" asp-items="new SelectList(Model.Users, nameof(UserModel.Id), nameof(UserModel.UserName))" required></select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-warning">Assign</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.UserRolesViewModels)
+        {
+            <tr>
+                <td>@user.User.UserName</td>
+                <td>
+                    <ul>
+                        @if (user.Roles != null && user.Roles.Any())
+                        {
+                            @foreach (var role in user.Roles){
+                                <li class="badge bg-success">
+                                    <form asp-action="DeleteRoleFromUser" method="post">
+                                        <input type="hidden" name="id" value="@user.User.Id" />
+                                        <input type="hidden" name="name" value="@role" />
+                                        <button type="submit" class="btn btm-sm btn-success">@role <span class="badge bg-danger">X</span></button>
+                                    </form>
+                                </li>
+                            }
+                        }
+                        else{
+                            <li class="badge bg-success">No Roles Assigned</li>
+                        }
+                    </ul>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
